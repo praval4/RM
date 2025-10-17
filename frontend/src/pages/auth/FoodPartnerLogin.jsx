@@ -1,0 +1,79 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../../styles/forms.css";
+
+const FoodPartnerLogin = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handlePartnerLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/food-partner/login",
+        formData,
+        { withCredentials: true }
+      );
+
+      console.log(response.data);
+      alert(response.data.message);
+      navigate("/create-food");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+      console.error("Login error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="page-container">
+      <div className="form-card">
+        <h2>Food Partner Login</h2>
+        <form onSubmit={handlePartnerLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+        </form>
+        <p>
+          Don't have an account? <Link to="/partner/register">Register</Link>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default FoodPartnerLogin;

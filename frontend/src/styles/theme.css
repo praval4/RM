@@ -1,0 +1,84 @@
+:root {
+  --font-family: 'Inter', sans-serif;
+  --border-radius: 12px;
+  --transition: 0.3s ease;
+
+  /* Default Light Mode */
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --input-bg: #f4f4f5;
+  --button-bg: #2563eb;
+  --button-text: #ffffff;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  /* Missing variables needed by create-food.css */
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f5f5;
+  --color-border: #e5e7eb;
+  --color-text: #111827;
+  --color-text-secondary: #6b7280;
+  --color-accent: #3b82f6;
+  --color-accent-hover: #2563eb;
+  --color-accent-light: rgba(59, 130, 246, 0.1);
+  --color-accent-shadow: rgba(59, 130, 246, 0.2);
+  --color-danger: #ef4444;
+  --color-danger-light: rgba(239, 68, 68, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+  --transition-base: 200ms ease;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+}
+
+/* Dark Mode via system preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #0f172a;
+    --text-color: #f1f5f9;
+    --input-bg: #1e293b;
+    --button-bg: #3b82f6;
+    --button-text: #f1f5f9;
+    --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+
+    /* Dark mode for create-food */
+    --color-bg: #0f172a;
+    --color-surface: #1e293b;
+    --color-surface-alt: #334155;
+    --color-border: #475569;
+    --color-text: #f1f5f9;
+    --color-text-secondary: #cbd5e1;
+    --color-accent: #60a5fa;
+    --color-accent-hover: #3b82f6;
+    --color-accent-light: rgba(96, 165, 250, 0.15);
+    --color-accent-shadow: rgba(96, 165, 250, 0.3);
+    --color-danger: #f87171;
+    --color-danger-light: rgba(248, 113, 113, 0.15);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Manual theme toggle using classes */
+.light {
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --input-bg: #f4f4f5;
+  --button-bg: #2563eb;
+  --button-text: #ffffff;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dark {
+  --bg-color: #0f172a;
+  --text-color: #f1f5f9;
+  --input-bg: #1e293b;
+  --button-bg: #3b82f6;
+  --button-text: #f1f5f9;
+  --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
