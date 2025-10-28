@@ -2,15 +2,12 @@ const jwt = require('jsonwebtoken');
 const userModel = require('../models/user.model');
 const foodPartnerModel = require('../models/foodpartner.model');
 
-// ----------------------
-// USER AUTH MIDDLEWARE
-// ----------------------
 async function authUserMiddleware(req, res, next) {
   try {
-    // 1) Try cookie first (if you use httpOnly cookie named 'token' or similar)
+   
     const cookieToken = req.cookies?.token || req.cookies?.authToken;
 
-    // 2) Fallback to Authorization header
+    
     const authHeader = req.headers?.authorization;
     const bearerToken = authHeader && authHeader.startsWith('Bearer ')
       ? authHeader.split(' ')[1]
@@ -47,7 +44,7 @@ async function authFoodPartnerMiddleware(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded food partner token:", decoded); // 🪶 debug once
+    console.log("Decoded food partner token:", decoded);
 
     // 🔑 Use decoded.id (not decoded._id)
     const foodPartner = await foodPartnerModel.findById(decoded.id);
