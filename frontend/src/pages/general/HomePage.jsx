@@ -21,7 +21,9 @@ const Home = () => {
     document.body.appendChild(el);
     setPortalEl(el);
     return () => {
-      if (el.parentNode) el.parentNode.removeChild(el);
+      if (el.parentNode !== null) {
+       el.parentNode.removeChild(el);
+     }
     };
   }, []);
 
