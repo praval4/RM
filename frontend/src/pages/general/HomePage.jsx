@@ -57,7 +57,6 @@ const Home = () => {
         .then(() => console.log('Video', index, 'playing'))
         .catch(err => {
           console.log('Play error:', err);
-          // Retry once
           setTimeout(() => {
             video.play().catch(e => console.log('Retry failed:', e));
           }, 300);
@@ -86,7 +85,7 @@ const Home = () => {
 
     const options = {
       root: containerRef.current,
-      threshold: 0.5, // Video is considered "in view" when 50% visible
+      threshold: 0.5, 
       rootMargin: '0px'
     };
 
@@ -172,7 +171,7 @@ const Home = () => {
     }
   };
 
-  // Loading state
+  // Loading
   if (loading) {
     return (
       <div style={{ 
@@ -186,7 +185,7 @@ const Home = () => {
     );
   }
 
-  // Error state
+  // Error
   if (error) {
     return (
       <div style={{ 
@@ -205,7 +204,7 @@ const Home = () => {
     );
   }
 
-  // No videos state
+  // No video
   if (reels.length === 0) {
     return (
       <div style={{ 
@@ -219,7 +218,7 @@ const Home = () => {
     );
   }
 
-  // saved button element (rendered via portal)
+  // save button
   const savedButton = (
     <Link to="/saved" className="saved-floating-btn" title="Saved Reels">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">

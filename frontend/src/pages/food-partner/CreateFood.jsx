@@ -24,7 +24,11 @@ const CreateFood = () => {
     }, [ videoFile ]);
 
     const onFileChange = (e) => {
-        const file = e.target.files && e.target.files[ 0 ];
+        if (e.target.files) {
+           const file = e.target.files[0];
+           } else {
+              const file = undefined;
+                }
         if (!file) { setVideoFile(null); setFileError(''); return; }
         if (!file.type.startsWith('video/')) { setFileError('Please select a valid video file.'); return; }
         setFileError('');
