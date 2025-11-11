@@ -22,6 +22,9 @@ async function createFood(req,res){
 
 async function getFoodItems(req,res){
   const foodItems=await foodModel.find({})
+  if(!foodItems){
+    return res.status(404).json({message:"No food items found"});
+  }
   res.status(200).json({message:"food items fetched successfully",
   foodItems
 });
@@ -64,10 +67,9 @@ async function saveFood(req, res) {
     if (!foodId) return res.status(400).json({ message: 'foodId required' });
 
     const existing = await saveModel.findOne({ user: user._id, food: foodId });
-
+    
     if (existing) {
-      // unsave
-      await existing.remove();
+      await saveModel.deleteOne({ _id: existing._id });
       await foodModel.findByIdAndUpdate(foodId, { $inc: { savesCount: -1 } });
       return res.json({ message: 'Unsaved', save: false });
     } else {

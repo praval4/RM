@@ -122,7 +122,7 @@ async function loginFoodPartner(req,res){
   }
 
   const token=jwt.sign({
-    _id:foodPartner._id
+    id:foodPartner._id
   },process.env.JWT_SECRET);
 
   res.cookie("token",token);
