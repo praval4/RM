@@ -26,29 +26,22 @@ const CreateFood = () => {
     return () => URL.revokeObjectURL(url);
   }, [videoFile]);
 
-  // ----- file handlers -----
   const onFileChange = (e) => {
-    // declare file here (fixes "file is not defined")
     const file = e?.target?.files?.[0];
     if (!file) {
       setVideoFile(null);
       setFileError('');
       return;
     }
-
-    // validation: must be video
     if (!file.type.startsWith('video/')) {
       setFileError('Please select a valid video file.');
       return;
     }
-
-    // validation: size
     const sizeMB = file.size / 1024 / 1024;
     if (sizeMB > MAX_FILE_MB) {
       setFileError(`File is too large — max ${MAX_FILE_MB} MB allowed.`);
       return;
     }
-
     setFileError('');
     setVideoFile(file);
   };
@@ -57,7 +50,7 @@ const CreateFood = () => {
     e.preventDefault();
     e.stopPropagation();
     const file = e.dataTransfer?.files?.[0];
-    if (!file) { return; }
+    if (!file) return;
     if (!file.type.startsWith('video/')) {
       setFileError('Please drop a valid video file.');
       return;
@@ -71,13 +64,9 @@ const CreateFood = () => {
     setVideoFile(file);
   };
 
-  const onDragOver = (e) => {
-    e.preventDefault();
-  };
-
+  const onDragOver = (e) => e.preventDefault();
   const openFileDialog = () => fileInputRef.current?.click();
 
-  // ----- submit -----
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!videoFile) {
@@ -93,24 +82,16 @@ const CreateFood = () => {
 
       const response = await axios.post('http://localhost:3000/api/food', formData, {
         withCredentials: true,
-        headers: {
-          // Axios sets the multipart header automatically for FormData,
-          // but leaving this field empty ensures no accidental override.
-        }
       });
 
       console.log('Upload response:', response.data);
-      // optionally reset local form
       setName('');
       setDescription('');
       setVideoFile(null);
       setFileError('');
-
-      // navigate to home (or show success message)
       navigate('/');
     } catch (err) {
       console.error('Failed to upload food', err);
-      // show a helpful message
       if (err.response?.data?.message) {
         setFileError(err.response.data.message);
       } else {
@@ -148,7 +129,12 @@ const CreateFood = () => {
               role="button"
               tabIndex={0}
               onClick={openFileDialog}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFileDialog(); } }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openFileDialog();
+                }
+              }}
               onDrop={onDrop}
               onDragOver={onDragOver}
             >
