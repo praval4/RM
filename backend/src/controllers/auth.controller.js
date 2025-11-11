@@ -92,15 +92,15 @@ async function registerFoodPartner(req,res){
  await foodPartner.save();
 
  const token=jwt.sign({
-  _id:foodPartner._id
+  id:foodPartner._id
  },process.env.JWT_SECRET);
 
- res.cookie("token",token);
+ res.cookie("token",token,{httpOnly:true});
 
  res.status(201).json({
   message:'Food Partner registered successfully',
   foodPartner:{
-    _id:foodPartner._id,
+    id:foodPartner._id,
     email:foodPartner.email,
     name:foodPartner.name
   }
