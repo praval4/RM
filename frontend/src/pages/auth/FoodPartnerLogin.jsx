@@ -69,7 +69,7 @@ const FoodPartnerLogin = () => {
           {error && <p style={{ color: "red" }}>{error}</p>}
         </form>
         <p>
-          Don't have an account? <Link to="/partner/register">Register</Link>
+          Don't have an account? <Link to="/food-partner/register">Register</Link>
         </p>
       </div>
     </div>

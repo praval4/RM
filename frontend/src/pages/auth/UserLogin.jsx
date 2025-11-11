@@ -71,6 +71,7 @@ const UserLogin = () => {
         <p>
           Don't have an account? <Link to="/user/register">Register</Link>
         </p>
+        <p>Are u a food-partner? <Link to="/food-partner/login">food partner login/register</Link></p>
       </div>
     </div>
   );
