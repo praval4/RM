@@ -15,8 +15,10 @@ async function createFood(req,res){
     foodPartner:req.foodPartner._id
    });
   
-   res.status(201).json({message:"Food Itwm created successfully",foodItem});
-   food:foodItem
+   res.status(201).json({message:"Food Itwm created successfully",foodItem,
+    foodPartnerId:req.foodPartner._id
+   });
+   
 
 }
 

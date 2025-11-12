@@ -22,6 +22,8 @@ router.post('/like',authMiddleware.authUserMiddleware, foodController.likeFood);
 
 router.get('/save', authMiddleware.authUserMiddleware, foodController.getSavedFoods);
 
+router.get('/save', authMiddleware.authFoodPartnerMiddleware, foodController.getSavedFoods);
+
 router.post('/save',authMiddleware.authUserMiddleware, foodController.saveFood);
 
 
