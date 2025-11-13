@@ -7,9 +7,10 @@ const foodRoutes = require('./routes/food.routes');
 const cors=require('cors');
 const foodPartnerRoutes = require('./routes/food-partner.routes');
 app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
+  origin: "*",
+  credentials: true
 }));
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
