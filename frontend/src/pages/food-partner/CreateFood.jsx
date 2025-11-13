@@ -80,39 +80,38 @@ const CreateFood = () => {
       formData.append('description', description);
       formData.append('video', videoFile);
 
-     const response = await axios.post('http://localhost:3000/api/food', formData, {
-  withCredentials: true,
-  headers: { 'Content-Type': 'multipart/form-data' },
-});
+      const response = await axios.post('http://localhost:3000/api/food', formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
 
-console.log('Upload response:', response.data);
+      console.log('Upload response:', response.data);
 
-const partnerId =
-  response.data?.foodPartnerId ||
-  response.data?.foodItem?.foodPartner ||
-  response.data?.foodItem?.foodPartner?._id ||
-  response.data?.partnerId;
+      const partnerId =
+        response.data?.foodPartnerId ||
+        response.data?.foodItem?.foodPartner ||
+        response.data?.foodItem?.foodPartner?._id ||
+        response.data?.partnerId;
 
-setName('');
-setDescription('');
-setVideoFile(null);
-setFileError('');
+      setName('');
+      setDescription('');
+      setVideoFile(null);
+      setFileError('');
 
-if (!partnerId) {
-  console.error('No partnerId found in upload response', response.data);
-  alert('Upload succeeded but partner id was not returned. Redirecting home.');
-  navigate('/');
-  return;
-}
+      if (!partnerId) {
+        console.error('No partnerId found in upload response', response.data);
+        alert('Upload succeeded but partner id was not returned. Redirecting home.');
+        navigate('/');
+        return;
+      }
 
-navigate(`/food-partner/${partnerId}`);
+      navigate(`/food-partner/partner/${partnerId}`);
     } catch (error) {
       console.error('Error uploading food item:', error);
       alert('Failed to upload food item. Please try again.');
     }
     setSubmitting(false);
   };
-    
 
   const isDisabled = useMemo(() => !name.trim() || !videoFile || submitting, [name, videoFile, submitting]);
 

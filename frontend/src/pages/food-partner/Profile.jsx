@@ -10,18 +10,28 @@ const Profile = () => {
     const [ loading, setLoading ] = useState(true)
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/food-partner/${id}`, { withCredentials: true })
-            .then(response => {
-                console.log('Profile data:', response.data) // Check what you're getting
-                setProfile(response.data.foodPartner)
-                setVideos(response.data.foodPartner.foodItems || [])
-                setLoading(false)
-            })
-            .catch(err => {
-                console.error('Error fetching profile:', err)
-                setLoading(false)
-            })
-    }, [ id ])
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      // detect whether it's user or partner route
+      const isPartner = window.location.pathname.includes('/partner/');
+      const url = `http://localhost:3000/api/food-partner/${isPartner ? 'partner' : 'user'}/${id}`;
+
+      const response = await axios.get(url, { withCredentials: true });
+      console.log('Profile data:', response.data);
+
+      setProfile(response.data.foodPartner);
+      setVideos(response.data.foodPartner.foodItems || []);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching profile:', err);
+      setLoading(false);
+    }
+  };
+
+  fetchProfile();
+}, [id]);
+
 
     if (loading) {
         return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>

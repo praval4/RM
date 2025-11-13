@@ -47,7 +47,8 @@ async function authFoodPartnerMiddleware(req, res, next) {
     console.log("Decoded food partner token:", decoded);
 
     // 🔑 Use decoded.id (not decoded._id)
-    const foodPartner = await foodPartnerModel.findById(decoded.id);
+    const foodPartner = await foodPartnerModel.findById(decoded.id || decoded._id);
+
     if (!foodPartner) {
       return res.status(401).json({ message: "Food partner not found" });
     }

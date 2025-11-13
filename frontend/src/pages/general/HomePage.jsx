@@ -288,7 +288,7 @@ const Home = () => {
               {/* Bottom row: Visit Store only (removed duplicate save button) */}
               <div className="reel-bottom-row" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginTop: '8px' }}>
                 <Link 
-                  to={`/food-partner/${reel.foodPartner}`}
+                  to={`/food-partner/user/${reel.foodPartner}`}
                   className="visit-store-btn"
                   style={{ textDecoration: 'none', padding: '6px 10px', background: 'var(--accent, #ff6b6b)', color: '#fff', borderRadius: 6 }}
                 >
