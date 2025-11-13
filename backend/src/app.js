@@ -8,17 +8,22 @@ const foodPartnerRoutes = require('./routes/food-partner.routes');
 
 const app = express();
 
-// IMPORTANT: replace this with the exact origin of your frontend
-const FRONTEND_ORIGIN = 'https://splendorous-treacle-719f9e.netlify.app';
+const WHITELIST = [
+  'http://localhost:3000',
+  'https://splendorous-treacle-719f9e.netlify.app'
+];
 
-app.use(cors({
-  origin: FRONTEND_ORIGIN,   // must be exact origin when credentials: true
-  credentials: true,         // sets Access-Control-Allow-Credentials: true
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'] // include any custom headers you use
-}));
-
-// Ensure OPTIONS preflight responses are handled
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (WHITELIST.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Requested-With');
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
 app.options('*', cors());
 
 app.use(express.json());
