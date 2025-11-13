@@ -8,6 +8,7 @@ const foodPartnerRoutes = require('./routes/food-partner.routes');
 
 const app = express();
 
+// temporary-cors-override.js — add this in app.js after express() and before routes
 const WHITELIST = [
   'http://localhost:3000',
   'https://splendorous-treacle-719f9e.netlify.app'
@@ -15,15 +16,20 @@ const WHITELIST = [
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  if (WHITELIST.includes(origin)) {
+  if (origin && WHITELIST.includes(origin)) {
+    // override any previously-set Access-Control headers
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Requested-With');
   }
-  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  // handle preflight early
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
   next();
 });
+
 app.options('*', cors());
 
 app.use(express.json());
