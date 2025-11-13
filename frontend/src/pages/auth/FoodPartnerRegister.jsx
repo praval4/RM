@@ -30,7 +30,7 @@ const FoodPartnerRegister = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/food-partner/register",
+        "https://rm-backend-l8at.onrender.com/api/auth/food-partner/register",
         formData,
         { withCredentials: true }
       );

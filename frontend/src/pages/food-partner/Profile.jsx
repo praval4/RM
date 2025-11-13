@@ -15,7 +15,7 @@ const Profile = () => {
       setLoading(true);
       // detect whether it's user or partner route
       const isPartner = window.location.pathname.includes('/partner/');
-      const url = `http://localhost:3000/api/food-partner/${isPartner ? 'partner' : 'user'}/${id}`;
+      const url = `https://rm-backend-l8at.onrender.com/api/food-partner/${isPartner ? 'partner' : 'user'}/${id}`;
 
       const response = await axios.get(url, { withCredentials: true });
       console.log('Profile data:', response.data);

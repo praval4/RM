@@ -15,7 +15,7 @@ const Saved = () => {
       setLoading(true)
       setError('')
       try {
-        const resp = await axios.get('http://localhost:3000/api/food/save', { withCredentials: true })
+        const resp = await axios.get('https://rm-backend-l8at.onrender.com/api/food/save', { withCredentials: true })
         // inspect response shape in case API differs
         // console.debug('saved response', resp)
         const savedFoods = (resp.data?.savedFoods || []).map(item => ({

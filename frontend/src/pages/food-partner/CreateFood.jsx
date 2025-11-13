@@ -80,7 +80,7 @@ const CreateFood = () => {
       formData.append('description', description);
       formData.append('video', videoFile);
 
-      const response = await axios.post('http://localhost:3000/api/food', formData, {
+      const response = await axios.post('https://rm-backend-l8at.onrender.com/api/food', formData, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });

@@ -32,7 +32,7 @@ const Home = () => {
     const fetchVideos = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:3000/api/food', {
+        const response = await axios.get('https://rm-backend-l8at.onrender.com/api/food', {
           withCredentials: true
         });
         console.log('API Response:', response.data);
@@ -121,7 +121,7 @@ const Home = () => {
   const handleLike = async (reel) => {
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/food/like',
+        'https://rm-backend-l8at.onrender.com/api/food/like',
         { foodId: reel._id },
         { withCredentials: true }
       );
@@ -148,7 +148,7 @@ const Home = () => {
   const handleSave = async (reel) => {
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/food/save',
+        'https://rm-backend-l8at.onrender.com/api/food/save',
         { foodId: reel._id },
         { withCredentials: true }
       );
