@@ -71,6 +71,10 @@ const FoodPartnerLogin = () => {
         <p>
           Don't have an account? <Link to="/food-partner/register">Register</Link>
         </p>
+        <br></br>
+         <p>
+          are u a user? <Link to="/user/login">Register/login</Link>
+        </p>
       </div>
     </div>
   );
