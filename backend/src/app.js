@@ -19,7 +19,7 @@ const WHITELIST = new Set([
   CLIENT_URL,
   'http://localhost:5173',
   'http://127.0.0.1:5173',
-  'https://splendorous-treacle-719f9e.netlify.app'
+  'https://reelmato.netlify.app'
 ]);
 
 // ====== DEBUG LOGGER ======
