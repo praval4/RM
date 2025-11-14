@@ -10,40 +10,42 @@ const foodPartnerRoutes = require('./routes/food-partner.routes');
 
 const app = express();
 
-// Make sure CLIENT_URL is EXACT (include https://) in Render env vars
+// ====== ENV ======
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+console.log("APP START - CLIENT_URL =", CLIENT_URL);
 
-// whitelist set for clarity
+// ====== WHITELIST ======
 const WHITELIST = new Set([
   CLIENT_URL,
   'http://localhost:5173',
   'http://127.0.0.1:5173'
 ]);
 
-// request logger to show incoming Origin (helps debug mismatches)
+// ====== DEBUG LOGGER ======
 app.use((req, res, next) => {
   const origin = req.headers.origin || '<no-origin>';
   console.log(`[INCOMING] ${req.method} ${req.originalUrl}  Origin: ${origin}`);
   next();
 });
 
+// ====== CORS OPTIONS ======
 const corsOptions = {
   origin: (origin, cb) => {
-    // allow non-browser tools (curl/postman) which send no origin
+    // Allow non-browser tools (curl, Postman)
     if (!origin) {
-      console.log('[CORS] no origin (tool/server) -> allow');
+      console.log("[CORS] No origin -> allow");
       return cb(null, true);
     }
 
-    console.log('[CORS] received origin:', origin);
+    console.log("[CORS] Received origin:", origin);
 
     if (WHITELIST.has(origin)) {
-      console.log('[CORS] origin allowed:', origin);
+      console.log("[CORS] Allowed:", origin);
       return cb(null, true);
     }
 
-    // Do NOT throw an error here. Return false so cors middleware won't set CORS headers.
-    console.log('[CORS] origin NOT allowed:', origin);
+    console.log("[CORS] BLOCKED:", origin);
+    // IMPORTANT: do NOT throw error. Just reject by returning false.
     return cb(null, false);
   },
   credentials: true,
@@ -52,32 +54,31 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-// register CORS BEFORE body parsers so preflight is handled early
+// ====== REGISTER CORS BEFORE PARSERS ======
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // respond to preflight
+app.options('*', cors(corsOptions)); // explicit preflight handler
 
-// JSON + cookies
+// ====== PARSERS ======
 app.use(express.json());
 app.use(cookieParser());
 
-// basic error handler (keeps stack traces server-side)
-app.use((err, req, res, next) => {
-  console.error('APP ERROR:', err);
-  if (!res.headersSent) {
-    res.status(500).json({ message: 'Internal server error' });
-  } else {
-    next(err);
-  }
-});
-
-// Health route
+// ====== HEALTH ROUTE ======
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-// API routes
+// ====== API ROUTES ======
 app.use('/api/auth', authRoutes);
 app.use('/api/food', foodRoutes);
 app.use('/api/food-partner', foodPartnerRoutes);
+
+// ====== ERROR HANDLER (CATCH ALL) ======
+app.use((err, req, res, next) => {
+  console.error("SERVER ERROR:", err);
+  if (!res.headersSent) {
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+  next(err);
+});
 
 module.exports = app;
