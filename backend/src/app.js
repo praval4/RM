@@ -64,7 +64,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // ====== HEALTH ROUTE ======
-app.get('/', (req, res) => {
+app.get('/health', (req, res) => {
   res.send('Hello World!');
 });
 
