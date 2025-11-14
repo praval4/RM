@@ -1,3 +1,5 @@
+// src/app.js
+require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -8,35 +10,33 @@ const foodPartnerRoutes = require('./routes/food-partner.routes');
 
 const app = express();
 
-// temporary-cors-override.js — add this in app.js after express() and before routes
-const WHITELIST = [
-  'http://localhost:3000',
-  'https://splendorous-treacle-719f9e.netlify.app'
-];
-
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (origin && WHITELIST.includes(origin)) {
-    // override any previously-set Access-Control headers
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Requested-With');
-  }
-  // handle preflight early
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
-  }
-  next();
-});
-
-app.options('*', cors());
-
+// JSON + cookies
 app.use(express.json());
 app.use(cookieParser());
 
-app.get('/', (req, res) => res.send('Hello World!'));
+// CORS: allow exact origin(s) for credentialed requests
+// Set CLIENT_URL in Render to your Netlify URL (e.g. https://splendorous-treacle-719f9e.netlify.app)
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
+app.use(cors({
+  origin: (origin, cb) => {
+    // allow non-browser tools like curl/postman (no origin)
+    if (!origin) return cb(null, true);
+    // allow localhost for dev and the configured client URL
+    if (origin === CLIENT_URL || origin === 'http://localhost:5173') return cb(null, true);
+    // else reject
+    cb(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
+
+// Health route
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/food', foodRoutes);
 app.use('/api/food-partner', foodPartnerRoutes);
