@@ -57,7 +57,7 @@ const corsOptions = {
 
 // ====== REGISTER CORS BEFORE PARSERS ======
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // explicit preflight handler
+// app.options('*', cors(corsOptions)); // explicit preflight handler
 
 // ====== PARSERS ======
 app.use(express.json());
