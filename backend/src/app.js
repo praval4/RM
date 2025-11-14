@@ -10,26 +10,65 @@ const foodPartnerRoutes = require('./routes/food-partner.routes');
 
 const app = express();
 
+// Make sure CLIENT_URL is EXACT (include https://) in Render env vars
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+
+// whitelist set for clarity
+const WHITELIST = new Set([
+  CLIENT_URL,
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+]);
+
+// request logger to show incoming Origin (helps debug mismatches)
+app.use((req, res, next) => {
+  const origin = req.headers.origin || '<no-origin>';
+  console.log(`[INCOMING] ${req.method} ${req.originalUrl}  Origin: ${origin}`);
+  next();
+});
+
+const corsOptions = {
+  origin: (origin, cb) => {
+    // allow non-browser tools (curl/postman) which send no origin
+    if (!origin) {
+      console.log('[CORS] no origin (tool/server) -> allow');
+      return cb(null, true);
+    }
+
+    console.log('[CORS] received origin:', origin);
+
+    if (WHITELIST.has(origin)) {
+      console.log('[CORS] origin allowed:', origin);
+      return cb(null, true);
+    }
+
+    // Do NOT throw an error here. Return false so cors middleware won't set CORS headers.
+    console.log('[CORS] origin NOT allowed:', origin);
+    return cb(null, false);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
+  optionsSuccessStatus: 204
+};
+
+// register CORS BEFORE body parsers so preflight is handled early
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // respond to preflight
+
 // JSON + cookies
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS: allow exact origin(s) for credentialed requests
-// Set CLIENT_URL in Render to your Netlify URL (e.g. https://splendorous-treacle-719f9e.netlify.app)
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
-
-app.use(cors({
-  origin: (origin, cb) => {
-    // allow non-browser tools like curl/postman (no origin)
-    if (!origin) return cb(null, true);
-    // allow localhost for dev and the configured client URL
-    if (origin === CLIENT_URL || origin === 'http://localhost:5173') return cb(null, true);
-    // else reject
-    cb(new Error('Not allowed by CORS'));
-  },
-  credentials: true,
-  optionsSuccessStatus: 200
-}));
+// basic error handler (keeps stack traces server-side)
+app.use((err, req, res, next) => {
+  console.error('APP ERROR:', err);
+  if (!res.headersSent) {
+    res.status(500).json({ message: 'Internal server error' });
+  } else {
+    next(err);
+  }
+});
 
 // Health route
 app.get('/', (req, res) => {
