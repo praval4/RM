@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // added useNavigate
 import { createPortal } from 'react-dom';
 import axios from 'axios';
 import '../../styles/home.css';
@@ -13,6 +13,7 @@ const Home = () => {
   const videoRefs = useRef([]);
   const observerRef = useRef(null);
   const [portalEl, setPortalEl] = useState(null);
+  const navigate = useNavigate(); // added
 
   useEffect(() => {
     // create portal root for saved button so fixed positioning isn't affected by ancestor transforms
@@ -171,6 +172,29 @@ const Home = () => {
     }
   };
 
+  // Logout handler (updated to replace history and reload)
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        'https://rm-backend-l8at.onrender.com/api/auth/logout',
+        {},
+        { withCredentials: true }
+      );
+    } catch (err) {
+      console.error('Logout failed', err);
+    } finally {
+      try { localStorage.removeItem('token'); localStorage.removeItem('user'); } catch(e){}
+      // navigate with replace then force full reload to ensure protected routes re-check auth
+      try {
+        navigate('/user/login', { replace: true });
+        // fallback to hard replace to clear history entry and reload
+        window.location.replace('/user/login');
+      } catch (e) {
+        window.location.replace('/user/login');
+      }
+    }
+  };
+
   // Loading
   if (loading) {
     return (
@@ -229,6 +253,27 @@ const Home = () => {
 
   return (
     <>
+      {/* Added logout button */}
+      <button
+        onClick={handleLogout}
+        className="logout-btn"
+        style={{
+          position: 'fixed',
+          top: 14,
+          right: 100,
+          zIndex: 3000,
+          padding: '8px 12px',
+          borderRadius: 6,
+          border: 'none',
+          background: 'rgba(0,0,0,0.6)',
+          color: '#fff',
+          cursor: 'pointer'
+        }}
+        title="Logout"
+      >
+        Logout
+      </button>
+
       <div ref={containerRef} className="reels-container">
         {reels.map((reel, index) => (
           <div 

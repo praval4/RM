@@ -5,9 +5,7 @@ const jwt = require('jsonwebtoken');
 const foodPartnerModel = require('../models/foodpartner.model');
 
 const COOKIE_NAME = 'token';
-const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
-
-// cookie options factory so clearCookie uses same options
+const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; 
 function cookieOptions(req) {
   const isProd = process.env.NODE_ENV === 'production';
   return {
