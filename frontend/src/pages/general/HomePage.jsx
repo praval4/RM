@@ -172,7 +172,7 @@ const Home = () => {
     }
   };
 
-  // Logout handler (updated to replace history and reload)
+  
   const handleLogout = async () => {
     try {
       await axios.post(
@@ -183,8 +183,9 @@ const Home = () => {
     } catch (err) {
       console.error('Logout failed', err);
     } finally {
-      try { localStorage.removeItem('token'); localStorage.removeItem('user'); } catch(e){}
-      // navigate with replace then force full reload to ensure protected routes re-check auth
+      try { localStorage.removeItem('token'); localStorage.removeItem('user');
+
+      } catch(e){}
       try {
         navigate('/user/login', { replace: true });
         // fallback to hard replace to clear history entry and reload
