@@ -43,7 +43,7 @@ async function likeFood(req,res){
 
 
  await foodModel.findByIdAndUpdate(foodId,{
-  $inc:{likeCount:1}
+  $dec:{likeCount:1}
  })
   if(isAlreadyLiked){
     return res.status(400).json({message:"User already liked this food"})
